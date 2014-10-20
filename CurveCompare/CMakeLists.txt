@@ -3,23 +3,14 @@ PROJECT(CurveCompare)
 CMAKE_MINIMUM_REQUIRED(VERSION 2.8)
 CMAKE_POLICY(VERSION 2.8)
 
-FIND_PACKAGE(ITK 4 REQUIRED)
-IF (ITK_FOUND)
-   INCLUDE(${USE_ITK_FILE})
-ELSE(ITK_FOUND)
-   MESSAGE(FATAL_ERROR, "ITKv4 not found. Please set ITK_DIR.")
-ENDIF (ITK_FOUND)
+include(FindITKUtil)
+INCLUDE(FindVTKUtil)
 
-FIND_PACKAGE(GenerateCLP REQUIRED)
-IF(GenerateCLP_FOUND)
-  INCLUDE(${GenerateCLP_USE_FILE})
-ELSE(GenerateCLP_FOUND)
-  MESSAGE(FATAL_ERROR
-          "GenerateCLP not found. Please set GenerateCLP_DIR.")
-ENDIF(GenerateCLP_FOUND)
+FindITKUtil()
+FindVTKUtil()
 
-find_package(VTK REQUIRED)
-include(${VTK_USE_FILE})
+find_package(SlicerExecutionModel REQUIRED GenerateCLP)
+include(${GenerateCLP_USE_FILE})
 
 
 IF( ${ITK_VERSION_MAJOR} VERSION_LESS 4 )
@@ -39,7 +30,7 @@ ExternalProject_Add(${proj}
     GIT_REPOSITORY "${git_protocol}://github.com/NIRALUser/CurveCompare.git"
     SOURCE_DIR ${proj}
     BINARY_DIR ${proj}-build
-    CMAKE_ARGS 
+    CMAKE_ARGS
       -DCMAKE_BUILD_TYPE:STRING=${CMAKE_BUILD_TYPE}
       -DGenerateCLP_DIR:PATH=${GenerateCLP_DIR}
       -DITK_DIR:PATH=${ITK_DIR}

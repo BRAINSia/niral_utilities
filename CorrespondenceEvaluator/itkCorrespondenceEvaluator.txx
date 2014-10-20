@@ -39,7 +39,7 @@ namespace itk
 
 	sample.resize ( this->m_NumberOfInputs ) ;
 
-    for ( int i = 0 ; i < this->m_NumberOfInputs ; i++ )
+    for (unsigned int i = 0 ; i < this->m_NumberOfInputs ; i++ )
     {
       sample[i] = this->ComputeGeneralizationError ( i, numberOfShapeParameters ) ;
       mean += sample[i] ;
@@ -49,7 +49,7 @@ namespace itk
     mean /= this->m_NumberOfInputs ;
 
 	// compute sample standard deviation
-	for ( int i = 0 ; i < this->m_NumberOfInputs ; i++ )
+	for ( unsigned int i = 0 ; i < this->m_NumberOfInputs ; i++ )
 	{
 		sample[i] -= mean ;
 		stddev += sample[i] * sample[i] ;
@@ -78,11 +78,11 @@ namespace itk
     // build model 
     MatrixType pcaMatrix, mean ;
     itk::Point <double, 3> sample ;
-    int nPoints = this->m_Meshes[0]->GetNumberOfPoints() ;
+    unsigned int nPoints = this->m_Meshes[0]->GetNumberOfPoints() ;
     pcaMatrix.set_size( 3*nPoints, this->m_NumberOfInputs );
     mean.set_size ( 3, nPoints ) ;
 
-    for (unsigned int row=0, pointId=0; pointId<nPoints; row+=3, pointId++)
+    for (unsigned int row=0, pointId=0; pointId < nPoints; row+=3, pointId++)
     {
       // compute mean of the training set
       mean[0][pointId] = mean[1][pointId] = mean[2][pointId] = 0 ;
@@ -126,7 +126,7 @@ namespace itk
   	std::vector < double > sampleErrors ;
 	  sampleErrors.resize ( N ) ;
 
-    for ( int i = 0 ; i < N ; i++ )
+    for ( unsigned int i = 0 ; i < N ; i++ )
     {
         // generate random shape parameters
         std::vector < double > b ;
@@ -171,7 +171,7 @@ namespace itk
         double dist ;
 		MatrixType currentMesh ;
 		currentMesh.set_size ( 3, nPoints ) ;
-        for ( int j = 0 ; j < this->m_NumberOfInputs ; j++ )
+        for ( unsigned int j = 0 ; j < this->m_NumberOfInputs ; j++ )
         {
 			for ( unsigned int pt = 0 ; pt < nPoints ; pt++ )
             {
@@ -200,7 +200,7 @@ namespace itk
 
 	// compute sample standard deviation
 	double stdDev = 0 ;
-	for ( int i = 0 ; i < N ; i++ )
+	for ( unsigned int i = 0 ; i < N ; i++ )
 	{
 		sampleErrors[i] -= specificity ;
 		stdDev += sampleErrors[i] * sampleErrors[i] ;
@@ -217,7 +217,7 @@ namespace itk
   void CorrespondenceEvaluator<TOutputMeshType>
   ::SetNumberOfInputs( unsigned int number )
   {
-    if ( number < 0 ) 
+    if ( number < 1 )
     {
       itkExceptionMacro( "Invalid number of inputs for correspondence evaluation." );
       return ;
@@ -244,7 +244,7 @@ namespace itk
   void CorrespondenceEvaluator<TOutputMeshType>
   ::BringInputToOrigin (unsigned int id)
   {
-    int nPoints = this->m_Meshes[id]->GetNumberOfPoints() ;
+    unsigned int nPoints = this->m_Meshes[id]->GetNumberOfPoints() ;
     double center[3] ;
     itk::Point <double, 3> sample ;
 
@@ -288,7 +288,7 @@ namespace itk
 
     MatrixType pcaMatrix, mean ;
     itk::Point <double, 3> sample ;
-    int nPoints = this->m_Meshes[0]->GetNumberOfPoints() ;
+    unsigned int nPoints = this->m_Meshes[0]->GetNumberOfPoints() ;
     pcaMatrix.set_size( 3*nPoints, this->m_NumberOfInputs-1 );
     mean.set_size ( 3, nPoints ) ;
 
