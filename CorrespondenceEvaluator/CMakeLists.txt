@@ -1,24 +1,19 @@
-PROJECT(CorrespondenceEvaluator)
+project(CorrespondenceEvaluator)
 
-FIND_PACKAGE(ITK)
-IF(ITK_FOUND)
-    INCLUDE(${ITK_USE_FILE})
-ELSE(ITK_FOUND)
-    MESSAGE(FATAL_ERROR
-    "ITK not found. Please set ITK_DIR.")
-ENDIF(ITK_FOUND)
+find_package(ITK)
+if(ITK_FOUND)
+    include(${ITK_USE_FILE})
+else(ITK_FOUND)
+    message(FATAL_ERROR "ITK not found. Please set ITK_DIR.")
+endif(ITK_FOUND)
 
-IF( ${ITK_VERSION_MAJOR} VERSION_GREATER 3 )
-  MESSAGE( FATAL_ERROR "CorrespondenceEvaluator needs ITKv3 to compile" )
-ENDIF()
-
-
-SET( SOURCES ${SOURCES}
-itkCorrespondenceEvaluator.h itkCorrespondenceEvaluator.txx)
+# IF( ${ITK_VERSION_MAJOR} VERSION_GREATER 3 )
+#   MESSAGE( FATAL_ERROR "CorrespondenceEvaluator needs ITKv3 to compile" )
+# ENDIF()
 
 
-ADD_EXECUTABLE(CorrespondenceEvaluator ${SOURCES} main.cpp)
-TARGET_LINK_LIBRARIES(  CorrespondenceEvaluator
-			ITKNumerics ITKCommon ITKBasicFilters ITKStatistics ITKIO
-)
+set( SOURCES ${SOURCES} itkCorrespondenceEvaluator.h itkCorrespondenceEvaluator.txx)
 
+
+add_executable(CorrespondenceEvaluator ${SOURCES} main.cpp)
+target_link_libraries( CorrespondenceEvaluator ${ITK_LIBRARIES} )

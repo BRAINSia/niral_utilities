@@ -46,15 +46,21 @@ bool readShapes ( std::string listName, evaluatorType::Pointer evaluator, unsign
   evaluator->SetNumberOfInputs ( numSamples ) ;
 
   // read the shapes
-  MeshConverterType * itkConverter = new MeshConverterType() ;
+  MeshConverterType::Pointer itkConverter = MeshConverterType::New();
   for ( int i = 0 ; i < numSamples ; i++ )
   {
     std::cout << "reading " << fileNames[i] << std::endl;
-    meshSOType::Pointer meshSO = itkConverter->ReadMeta ( fileNames[i].c_str() ) ;
+    itk::SpatialObject<3>::Pointer _meshSO = itkConverter->ReadMeta ( fileNames[i].c_str() );
+    meshSOType::Pointer meshSO = dynamic_cast<meshSOType *>(_meshSO.GetPointer()) ;
+    if(meshSO.IsNull())
+      {
+      std::cerr << "Failed dynamic conversion to MeshSpatialObject, actuall class is "
+                << _meshSO->GetNameOfClass();
+      return false;
+      }
     meshType::Pointer mesh = meshSO->GetMesh() ;
     evaluator->SetInput ( i, mesh ) ;
   }
-  delete (itkConverter);
   
   nSamples = numSamples ;
 
